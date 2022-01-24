@@ -31,7 +31,7 @@ def simple_table_present(table, dbpointer):
 
     try:
         view = dbpointer.lookup(table=table)
-    except Exception,e:
+    except:
         logging.warning( 'export_events.simple_table_present: %s ' %s )
         return False
 
@@ -125,7 +125,7 @@ def get_all_fields( dbpointer , nulls={}):
         if not dbpointer.query(datascope.dbTABLE_PRESENT):
             logging.warning('export_events.get_all_fields: No records')
             return results
-    except Exception,e:
+    except:
         logging.warning('export_events.get_all_fields: Error on dbpointer')
         return results
 
@@ -194,7 +194,7 @@ def open_verify_pf(pf,mttime=False):
 
     try:
         return stock.pfread( pf )
-    except Exception,e:
+    except:
         logging.error( 'Problem looking for %s => %s' % ( pf, e ) )
 
 
@@ -211,7 +211,7 @@ def safe_pf_get(pf,field,defaultval=False):
     if pf.has_key(field):
         try:
             value = pf.get(field,defaultval)
-        except Exception,e:
+        except:
             logging.warning('Problems safe_pf_get(%s,%s)' % (field,e))
             pass
 

@@ -3,7 +3,31 @@ from antelope.stock import grname
 import datetime
 from export_events.functions import *
 import os
-import rebhelper
+#import .rebhelper
+import re
+def rebhelper():
+# Antelope Linux_a2  REB - Event        2  Muntenia, judetul Braila                                        Op: Daniel Paulescu
+# Antelope Linux_a2  REB - Event        6  Zona seismica Vrancea, judetul Vrancea;  I0 = I                 Op: Laura Petrescu
+# Antelope Linux_a2  REB - Event        6  Zona seismica Vrancea, judetul Vrancea                          Op: Laura Petrescu
+    header = re.compile('^Antelope .*- Event\s+\d+\s+([\w,\s-]+);?(?:\s+I0 = ([IXV]+)\s+)?(?:\s+Op: (.*))?$')
+
+    def trystrip(arg):
+        try:
+            return arg.strip()
+        except:
+            return arg
+
+    def parse_header(rebpath):
+
+        with open(rebpath, 'rb') as f:
+            for line in f:
+                if line.startswith('Antelope'):
+                    break
+
+            m = header.match(line)
+            region, intensity, operator = map(trystrip, m.groups())
+            return region, intensity, operator
+
 
 class css2qml():
     '''
@@ -839,7 +863,7 @@ class css2qml():
             try:
                 temp = str(auth).split(':')
                 if not temp: raise Exception('wrong format')
-            except Exception,e:
+            except:
                 self.logging.debug( 'Problem parsing auth for _catalog_info [%s]=>%s' % (auth,e) )
 
             #self.logging.debug( temp )

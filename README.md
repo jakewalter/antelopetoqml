@@ -1,3 +1,11 @@
+
+%%%%%%%%%%%%%%%%
+
+Fork of antelopetoqml that works with Python3 and avoids some stock (Antelope python script) errors. It seems to work fine to get picks and arrivals from origins but magnitudes are not working.
+
+
+
+
 Example
 ======
 

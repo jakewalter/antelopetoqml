@@ -57,7 +57,7 @@ from optparse import OptionParser
 try:
     import antelope.stock as stock
     import antelope.datascope as datascope
-except Exception, e:
+except:
     sys.exit("Import Error: [%s] Do you have ANTELOPE installed?" % e)
 
 try:
@@ -66,13 +66,13 @@ try:
     from export_events.event import Event
     from export_events.css2qml import css2qml
     from export_events.xmltodict import *
-except Exception, e:
+except:
     sys.exit("[%s] Error loading  qml functions." % e)
 
 try:
     from lxml import etree
     validation = True
-except Exception, e:
+except:
     validation = False
 
 MODE = 'w'
@@ -97,7 +97,7 @@ def event_xml(event_id, event, quakeml, output_file):
             ofile.write(results)
 
             ofile.close()
-        except Exception, e:
+        except:
             logging.error('Problems writing to file [%s]=>%s' % (
                 output_file, e))
     else:
@@ -129,8 +129,8 @@ def event_xml(event_id, event, quakeml, output_file):
                 xmldoc = etree.parse(output_text)
                 valid = relaxng.validate(xmldoc)
 
-            except Exception, e:
-                logging.warning("%s => %s" % (Exception, e))
+            except:
+                #logging.warning("%s => %s" % (Exception))
                 logging.warning("Cannot validate.")
 
         else:
@@ -181,17 +181,18 @@ def setup_event2qml(options, database):
                                         'magnitude_type_subset', ['.*'])
     info_description = safe_pf_get(pf_object, 'event_info_description', '')
     info_comment = safe_pf_get(pf_object, 'event_info_comment', '')
-    append_to_output_file = stock.yesno(
-        safe_pf_get(pf_object, 'append_to_output_file', 'true'))
-    add_mt = stock.yesno(safe_pf_get(pf_object, 'add_mt', 'true'))
-    add_origin = stock.yesno(safe_pf_get(pf_object, 'add_origin', 'true'))
-    add_fplane = stock.yesno(safe_pf_get(pf_object, 'add_fplane', 'true'))
-    add_stamag = stock.yesno(safe_pf_get(pf_object, 'add_stamag', 'true'))
-    add_arrival = stock.yesno(safe_pf_get(pf_object, 'add_arrival', 'true'))
-    add_detection = stock.yesno(safe_pf_get(pf_object, 'add_detection',
-                                            'true'))
-    add_magnitude = stock.yesno(safe_pf_get(pf_object, 'add_magnitude',
-                                            'true'))
+    print((pf_object, 'append_to_output_file', 'true'))
+    append_to_output_file = False
+    
+    add_mt = False #stock.yesno(safe_pf_get(pf_object, 'add_mt', 'true'))
+    add_origin = 'true' #stock.yesno(safe_pf_get(pf_object, 'add_origin', 'true'))
+    add_fplane = 'false' #stock.yesno(safe_pf_get(pf_object, 'add_fplane', 'true'))
+    add_stamag = 'true' #stock.yesno(safe_pf_get(pf_object, 'add_stamag', 'true'))
+    add_arrival = 'true' #stock.yesno(safe_pf_get(pf_object, 'add_arrival', 'true'))
+    add_detection = 'false' #stock.yesno(safe_pf_get(pf_object, 'add_detection',
+#                                            'true'))
+    add_magnitude = 'true' #stock.yesno(safe_pf_get(pf_object, 'add_magnitude',
+                                           # 'true'))
     mt_auth_select = filter(None, safe_pf_get(pf_object,
                                               'mt_auth_select', []))
     mt_auth_reject = filter(None, safe_pf_get(pf_object,
